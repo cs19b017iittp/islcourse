@@ -97,12 +97,32 @@ def get_model_advanced(train_data_loader=None, n_epochs=10,lr=1e-4,config=None):
 def test_model(model1=None, test_data_loader=None):
 
   accuracy_val, precision_val, recall_val, f1score_val = 0, 0, 0, 0
-  # write your code here as per instructions
-  # ... your code ...
-  # ... your code ...
-  # ... and so on ...
-  # calculate accuracy, precision, recall and f1score
   
-  print ('Returning metrics... (rollnumber: xx)')
+  size = len(test_data_loader.dataset)
+  num_batches = len(test_data_loader)
+  model1.eval()
+  test_loss, correct = 0, 0
+  
+
+  y_true = []
+  y_pred = []
+
+  with torch.no_grad():
+      for X, y in test_data_loader:
+          y_true.append(y)
+          X, y = X.to(device), y.to(device)
+          pred = model1(X)
+          test_loss += loss_fn(pred, y).item()
+          y_pred.append(pred.argmax(1))
+          correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+  test_loss /= num_batches
+  correct /= size
+
+
+  accuracy_val = correct
+
+  print(y_true[0])
+  print(y_pred[0])
+  print ('Returning metrics... (rollnumber: cs19b017)')
   
   return accuracy_val, precision_val, recall_val, f1score_val
