@@ -132,4 +132,4 @@ def test(test_data_loader, model):
   recall_val = recall_score(actual, predicted, average='macro')
   f1_val= f1_score(actual, predicted, average='macro')
   
-  return(accuracy_val, precision_val,recall_val,f1_val)
+  return accuracy_val, precision_val,recall_val,f1_val
