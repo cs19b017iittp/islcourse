@@ -100,7 +100,7 @@ def get_model_advanced(training_data_loader, n_epochs, lr,config):
           print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
   return model
 
-def test(test_data_loader, model):
+def test(test_data_loader, model1):
   size = len(test_data_loader.dataset)
   num_batches = len(test_data_loader)
   model.eval()
