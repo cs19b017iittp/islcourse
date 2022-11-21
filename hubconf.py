@@ -73,6 +73,8 @@ def compare_clusterings(ypred_1=None,ypred_2=None):
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+from sklearn import svm, datasets
+from sklearn.model_selection import GridSearchCV
 
 def build_lr_model(X=None, y=None):
   pass
@@ -104,3 +106,57 @@ def get_metrics(model1=None,X=None,y=None):
   f1 =  f1_score(y, y_pred, average='micro' )
   auc = roc_auc_score(y, model1.predict_proba(X), multi_class='ovr' )
   return acc, prec, rec, f1, auc
+
+def get_paramgrid_lr():
+  # you need to return parameter grid dictionary for use in grid search cv
+  # penalty: l1 or l2
+  # refer to sklearn documentation on grid search and logistic regression
+  # write your code here...
+  lr_param_grid = {
+      "max_iter": [100, 200, 500],
+      "penalty": ["l1","l2"],
+      "solver" : ["liblinear"]
+  }
+  return lr_param_grid
+
+def get_paramgrid_rf():
+  # you need to return parameter grid dictionary for use in grid search cv
+  # n_estimators: 1, 10, 100
+  # criterion: gini, entropy
+  # maximum depth: 1, 10, None  
+  rf_param_grid = { 
+    'n_estimators' : [1, 10, 100],
+    'max_depth' : [1,10,None],
+    'criterion' :['gini', 'entropy'],
+
+  }
+  # refer to sklearn documentation on grid search and random forest classifier
+  # write your code here...
+  return rf_param_grid
+
+def perform_gridsearch_cv_multimetric(model1=None, param_grid=None, cv=5, X=None, y=None, metrics=['accuracy','roc_auc']):
+  
+  # you need to invoke sklearn grid search cv function
+  # refer to sklearn documentation
+  # the cv parameter can change, ie number of folds  
+  
+  # metrics = [] the evaluation program can change what metrics to choose
+  
+  grid_search_cv = None
+  # create a grid search cv object
+  # fit the object on X and y input above
+  # write your code here...
+  
+  # metric of choice will be asked here, refer to the-scoring-parameter-defining-model-evaluation-rules of sklearn documentation
+  
+  # refer to cv_results_ dictonary
+  # return top 1 score for each of the metrics given, in the order given in metrics=... list
+  print(model1.get_params().keys())
+  top1_scores = []
+
+  for scoring in metrics:
+    grid_search_cv = GridSearchCV(model1,param_grid, cv=cv, scoring=scoring)
+    grid_search_cv.fit(X,y)
+    top1_scores.append(grid_search_cv.best_score_)
+
+  return top1_scores
